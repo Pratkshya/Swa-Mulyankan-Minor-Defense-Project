@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }} - Chapter Selection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <a href="/logout" class="logout-btn">Logout</a>
+    <a href="{{ url_for('chapters.view_subjects') }}" class="back-btn">← Back</a>
+
+    <div class="container">
+        <div class="header">
+            <div class="subject-badge">Astronomy</div>
+            <h1>Chapter Selection</h1>
+            <p>Select a chapter to begin your quiz</p>
+        </div>
+
+        <div class="chapters-grid">
+            {% for chapter in chapters %}
+            <a href="{{ url_for('dashboard.quiz', chapter_id=chapter.id, subject=subject_id) }}" class="chapter-card">
+                <div class="chapter-number">{{ loop.index }}</div>
+                <h3>{{ chapter.name }}</h3>
+                <p>{{ chapter.description }}</p>
+                <span class="question-count">{{ chapter.question_count }} questions</span>
+                <div class="start-button">Start Quiz</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

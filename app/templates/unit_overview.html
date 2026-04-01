@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ unit_name }} Unit - Swa Mulyankan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <a href="/logout" class="logout-btn">Logout</a>
+
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Swa Mulyankan</h1>
+            <p>Your learning assessment platform</p>
+        </div>
+
+        <div class="unit-card">
+            <div class="unit-title">{{ unit_name }} Unit</div>
+            <div class="chapter-info">Comprehensive assessment covering astronomical concepts</div>
+            <div class="chapter-count">{{ chapter_count }} Chapters Available</div>
+            <a href="{{ url_for('chapters.view_chapters', subject='astronomy') }}" class="select-button">View Chapters</a>
+        </div>
+    </div>
+</body>
+</html>

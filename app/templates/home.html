@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swa-Mulyankan - SEE Diagnostic Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">
+                📚 Swa-Mulyankan
+            </a>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+            <a href="/register" class="btn-auth btn-signup">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>📊 Swa-Mulyankan</h1>
+        <div class="tagline">
+            A web-based diagnostic tool designed to identify learning gaps in SEE students based on the Nepal CDC Specification Grid 2082
+        </div>
+        <div class="cta-buttons">
+            <a href="/register" class="btn btn-primary">Get Started</a>
+            <a href="/features" class="btn btn-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Key Benefits -->
+    <section class="container">
+        <h2>Why Choose Swa-Mulyankan?</h2>
+        <p>Empower your SEE preparation with intelligent diagnostics and personalized learning paths</p>
+        
+        <div class="highlights">
+            <div class="highlight-box">
+                <div class="icon">🎯</div>
+                <h3>Precision Diagnostics</h3>
+                <p>Identify specific learning gaps at the concept level, not just overall scores</p>
+            </div>
+            <div class="highlight-box">
+                <div class="icon">📈</div>
+                <h3>Data-Driven Analysis</h3>
+                <p>Mathematical scoring based on mastery index and gap severity calculations</p>
+            </div>
+            <div class="highlight-box">
+                <div class="icon">🛠️</div>
+                <h3>Actionable Remediation</h3>
+                <p>Get a personalized study plan targeting your specific weak areas</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>The Tri-Core Architecture</h2>
+            <p>Three-stage system for comprehensive learning gap identification</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>📥 Input</h3>
+                    <p><strong>Data Acquisition & Structuring</strong><br>
+                    Converts question papers into digital format and maps them to CDC units with cognitive levels</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>⚙️ Logic</h3>
+                    <p><strong>Evaluation & Analysis</strong><br>
+                    Records performance at concept level and calculates mastery index and gap severity</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>📊 Output</h3>
+                    <p><strong>Visual Feedback & Remediation</strong><br>
+                    Generates color-coded dashboards and personalized study plans for improvement</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Boost Your SEE Score?</h2>
+            <p>Start your diagnostic quiz today and get your personalized study plan</p>
+            <a href="/register" class="btn btn-primary" style="margin-top: 1rem;">Become a Member</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Swa-Mulyankan. A tool for SEE students to excel.</p>
+    </footer>
+</body>
+</html>

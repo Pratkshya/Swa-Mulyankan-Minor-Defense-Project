@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - {{ chapter_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>📝 {{ chapter_name }}</h1>
+            <p style="color: #666; margin: 5px 0 0 0;">Test your knowledge with random questions</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+            </div>
+        </div>
+
+        <div class="question-nav">
+            <p id="questionCounter">Question <span id="currentQ">1</span> of {{ questions|length }}</p>
+        </div>
+
+        <form id="quizForm">
+            {% for question in questions %}
+            <div class="quiz-content" id="question-{{ loop.index0 }}" style="{{ 'display: none;' if loop.index0 != 0 }}">
+                <div class="question-number">Question {{ loop.index }} of {{ questions|length }}</div>
+                
+                <div class="question-text">{{ question.question }}</div>
+                
+                <div class="options-container">
+                    <label class="option">
+                        <input type="radio" name="{{ question.id }}" value="a" onclick="checkAnswer(this, '{{ question.id }}', 'a', '{{ question.correct_answer }}', '{{ question.hint }}')">
+                        <span class="option-text">{{ question.option_a }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="{{ question.id }}" value="b" onclick="checkAnswer(this, '{{ question.id }}', 'b', '{{ question.correct_answer }}', '{{ question.hint }}')">
+                        <span class="option-text">{{ question.option_b }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="{{ question.id }}" value="c" onclick="checkAnswer(this, '{{ question.id }}', 'c', '{{ question.correct_answer }}', '{{ question.hint }}')">
+                        <span class="option-text">{{ question.option_c }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="{{ question.id }}" value="d" onclick="checkAnswer(this, '{{ question.id }}', 'd', '{{ question.correct_answer }}', '{{ question.hint }}')">
+                        <span class="option-text">{{ question.option_d }}</span>
+                    </label>
+                </div>
+
+                <div class="hint-section" id="hint-{{ question.id }}">
+                    <div class="hint-label">Hint</div>
+                    <div class="hint-text">{{ question.hint }}</div>
+                    <div class="attempt-count">Attempts: <span id="attempts-{{ question.id }}">0</span></div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-prev" onclick="previousQuestion()" id="prevBtn" style="{{ 'display: none;' if loop.index0 == 0 }}">← Previous</button>
+                    <button type="button" class="btn btn-next" onclick="nextQuestion()" id="nextBtn{{ loop.index0 }}" style="{{ 'display: none;' if loop.index0 == questions|length - 1 }}">Next →</button>
+                    <button type="submit" class="btn btn-submit" id="submitBtn" style="{{ 'display: none;' if loop.index0 != questions|length - 1 }}">Submit Quiz</button>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Hidden field to store attempts data -->
+            <input type="hidden" id="attemptsData" name="attempts_data" value="{}">
+        </form>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const totalQuestions = {{ questions|length }};
+        const attemptsMap = {};
+        
+        // Initialize attempts map
+        {% for question in questions %}
+        attemptsMap['{{ question.id }}'] = 0;
+        {% endfor %}
+
+        function showQuestion(index) {
+            if (index < 0 || index >= totalQuestions) return;
+
+            // Hide all questions
+            for (let i = 0; i < totalQuestions; i++) {
+                document.getElementById('question-' + i).style.display = 'none';
+            }
+
+            // Show current question
+            document.getElementById('question-' + index).style.display = 'block';
+            currentQuestion = index;
+
+            // Update progress bar
+            const progress = ((index + 1) / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentQ').textContent = index + 1;
+
+            // Update button visibility
+            const prevBtn = document.querySelectorAll('.btn-prev')[index] || document.querySelector('.btn-prev');
+            const nextBtn = Array.from(document.querySelectorAll('.btn-next')).find(btn => {
+                return btn.closest('#question-' + index);
+            });
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Show/hide previous button
+            if (prevBtn) prevBtn.style.display = index === 0 ? 'none' : 'block';
+
+            // Show/hide next button and submit button
+            if (nextBtn) nextBtn.style.display = index === totalQuestions - 1 ? 'none' : 'block';
+            if (submitBtn) submitBtn.style.display = index === totalQuestions - 1 ? 'block' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions - 1) {
+                showQuestion(currentQuestion + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function checkAnswer(radioInput, questionId, selectedValue, correctValue, hint) {
+            const optionLabel = radioInput.closest('.option');
+            const questionDiv = document.getElementById('question-' + currentQuestion);
+            const hintSection = document.getElementById('hint-' + questionId);
+            const allOptions = questionDiv.querySelectorAll('.option');
+
+            // Reset all options to neutral state
+            allOptions.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+
+            // Increment attempt count
+            const attemptCountEl = document.getElementById('attempts-' + questionId);
+            let currentCount = parseInt(attemptCountEl.textContent);
+            currentCount++;
+            attemptCountEl.textContent = currentCount;
+            attemptsMap[questionId] = currentCount;
+
+            if (selectedValue === correctValue) {
+                // Correct answer
+                optionLabel.classList.add('correct');
+                hintSection.classList.remove('show');
+            } else {
+                // Incorrect answer
+                optionLabel.classList.add('incorrect');
+                hintSection.classList.add('show');
+                radioInput.checked = false;
+            }
+
+            // Update attempts data in hidden field
+            document.getElementById('attemptsData').value = JSON.stringify(attemptsMap);
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect final answers
+            const formData = new FormData(this);
+            
+            // Add attempts data
+            formData.set('attempts_data', document.getElementById('attemptsData').value);
+
+            // Submit the form
+            fetch('{{ url_for("test.submit") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.open();
+                document.write(html);
+                document.close();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Initialize
+        showQuestion(0);
+    </script>
+</body>
+</html>

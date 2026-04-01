@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Selection - Swa Mulyankan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <a href="/logout" class="logout-btn">Logout</a>
+
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Choose Your Subject</h1>
+            <p>Select a subject to explore and test your knowledge</p>
+        </div>
+
+        <div class="subjects-grid">
+            {% for subject in subjects %}
+            <a href="{{ url_for('chapters.view_chapters', subject=subject.id) }}" class="subject-card">
+                <div class="subject-icon">{{ subject.icon }}</div>
+                <h3>{{ subject.name }}</h3>
+                <p>{{ subject.description }}</p>
+                <span class="chapter-count">📚 {{ subject.chapter_count }} chapters</span>
+                <div class="select-button">Select Subject</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

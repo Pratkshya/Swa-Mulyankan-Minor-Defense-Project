@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Swa-Mulyankan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">📚 Swa-Mulyankan</a>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+            <a href="/register" class="btn-auth btn-signup">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>About Swa-Mulyankan</h1>
+            <p>A comprehensive diagnostic tool for SEE student success</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <section class="what-we-do">
+        <div class="container">
+            <h2>What is Swa-Mulyankan?</h2>
+            
+            <p>
+                <strong>Swa-Mulyankan</strong> is a web-based diagnostic tool designed to identify learning gaps in SEE (School Examination Examination) students based on the Nepal CDC Specification Grid 2082. Our mission is to empower students with precise, data-driven insights into their academic performance and provide actionable pathways for improvement.
+            </p>
+
+            <div class="highlight">
+                <h3>The Problem We Solve</h3>
+                <p>
+                    Traditional testing approaches provide only overall scores, leaving students unsure about where they actually need to improve. Swa-Mulyankan goes deeper—we identify learning gaps at the concept level, showing exactly what you need to master to excel in your exams.
+                </p>
+            </div>
+
+            <!-- Three-Stage System -->
+            <h2>The Tri-Core Architecture</h2>
+            <p>
+                Our system operates on a three-stage framework that ensures comprehensive learning gap identification and personalized remediation:
+            </p>
+
+            <div class="stages">
+                <div class="stage-card" data-stage="1">
+                    <div class="stage-number">1</div>
+                    <h4>📥 Input (Data Structuring)</h4>
+                    <p>Raw questions are mapped to CDC units, weighted, and tagged by cognitive level.</p>
+                    <ul>
+                        <li>OCR or manual input conversion</li>
+                        <li>CDC unit and standard mapping</li>
+                        <li>Weightage assignment for exam importance</li>
+                        <li>Cognitive level tagging (Knowledge, Understanding, Application, Higher Ability)</li>
+                    </ul>
+                    <button class="detail-button" type="button">Expand</button>
+                </div>
+
+                <div class="stage-card" data-stage="2">
+                    <div class="stage-number">2</div>
+                    <h4>⚙️ Logic (Analysis)</h4>
+                    <p>Performance is scored by attempts, mastery index, and severity factors.</p>
+                    <ul>
+                        <li>Track correct/incorrect responses and attempt count</li>
+                        <li>Calculate mastery index per chapter</li>
+                        <li>Compute severity factor to highlight gaps</li>
+                        <li>Align results with cognitive level profiles</li>
+                    </ul>
+                    <button class="detail-button" type="button">Expand</button>
+                </div>
+
+                <div class="stage-card" data-stage="3">
+                    <div class="stage-number">3</div>
+                    <h4>📊 Output (Feedback)</h4>
+                    <p>Analysis is transformed into heatmaps and personalized study recommendations.</p>
+                    <ul>
+                        <li>Color-coded gap heatmap</li>
+                        <li>Performance breakdown per topic</li>
+                        <li>Suggested focus areas and practice targets</li>
+                        <li>Progress tracking over multiple quizzes</li>
+                    </ul>
+                    <button class="detail-button" type="button">Expand</button>
+                </div>
+            </div>
+
+            <!-- Key Features -->
+            <h2>Our Unique Approach</h2>
+
+            <div class="mission-vision">
+                <div class="mission-box">
+                    <div class="icon">🎯</div>
+                    <h4>Concept-Level Analysis</h4>
+                    <p>We don't just count right or wrong answers. We analyze your understanding at the deepest level to identify exactly where improvements are needed.</p>
+                </div>
+
+                <div class="mission-box">
+                    <div class="icon">📊</div>
+                    <h4>CDC-Aligned</h4>
+                    <p>Every question in our system is mapped to the official Nepal CDC Specification Grid 2082 with proper weightage and cognitive levels.</p>
+                </div>
+
+                <div class="mission-box">
+                    <div class="icon">💡</div>
+                    <h4>Interactive Learning</h4>
+                    <p>Our hint system guides you through the learning process, making mistakes into opportunities for understanding rather than frustration.</p>
+                </div>
+
+                <div class="mission-box">
+                    <div class="icon">📈</div>
+                    <h4>Data-Driven Remediation</h4>
+                    <p>Your personalized study plan is based on actual performance data, not generic advice. Focus your efforts where they matter most.</p>
+                </div>
+            </div>
+
+            <!-- Why Choose -->
+            <h2>Why Students Should Choose Swa-Mulyankan</h2>
+
+            <div class="highlight">
+                <h3>Precision Over General Guidance</h3>
+                <p>
+                    Instead of telling you "study harder," we show you exactly which concepts need attention and how much time to spend on each. This focused approach saves time and maximizes exam readiness.
+                </p>
+            </div>
+
+            <div class="highlight">
+                <h3>Evidence-Based Recommendations</h3>
+                <p>
+                    Every suggestion in your remedial plan is backed by analytical data from your actual performance, ensuring recommendations are truly tailored to your needs.
+                </p>
+            </div>
+
+            <div class="highlight">
+                <h3>Continuous Improvement Tracking</h3>
+                <p>
+                    Monitor your progress over time. Retake quizzes to see how much you've improved and track the effectiveness of your study efforts.
+                </p>
+            </div>
+
+            <!-- Vision -->
+            <h2>Our Vision</h2>
+
+            <p>
+                We envision a future where every SEE student has access to intelligent, personalized diagnostic tools that reveal their true strengths and targeted improvement opportunities. By combining data science with educational psychology, Swa-Mulyankan aims to transform how students prepare for their exams—moving from hope to strategy, from guesswork to precision.
+            </p>
+
+            <p>
+                Our ultimate goal is to help every student achieve their full potential in the SEE examinations, ultimately contributing to better educational outcomes across Nepal's secondary school system.
+            </p>
+        </div>
+    </section>
+
+    <script>
+        document.querySelectorAll('.stage-card').forEach(card => {
+            const button = card.querySelector('.detail-button');
+            button.addEventListener('click', event => {
+                event.stopPropagation();
+                const expanded = card.classList.toggle('expanded');
+                button.textContent = expanded ? 'Collapse' : 'Expand';
+            });
+
+            card.addEventListener('click', () => {
+                const expanded = card.classList.toggle('expanded');
+                button.textContent = expanded ? 'Collapse' : 'Expand';
+            });
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Swa-Mulyankan. Empowering SEE students with intelligent, precision diagnostics.</p>
+    </footer>
+</body>
+</html>

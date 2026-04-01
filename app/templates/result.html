@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="result-container">
+        <div class="result-header">
+            <h1>📊 Quiz Results</h1>
+            <div class="result-score">{{ (mastery * 100)|int }}%</div>
+            <div class="result-status">
+                <span class="status-badge status-{% if status == 'Excellent' %}excellent{% elif status == 'Good' %}good{% elif status == 'Fair' %}fair{% else %}needs-work{% endif %}">
+                    {{ status }}
+                </span>
+            </div>
+        </div>
+
+        <!-- ⭐ PROFESSIONAL RESULT HEATMAP ⭐ -->
+        <div class="performance-heatmap">
+            <div class="heatmap-title">📈 Performance Distribution</div>
+            
+            <div class="heatmap-grid">
+                <div class="heatmap-label">Chapter</div>
+                <div class="heatmap-header">Excellent<br><small>(80-100%)</small></div>
+                <div class="heatmap-header">Good<br><small>(60-79%)</small></div>
+                <div class="heatmap-header">Fair<br><small>(40-59%)</small></div>
+                <div class="heatmap-header">Needs Work<br><small>(&lt;40%)</small></div>
+                
+                {% for unit, score in heatmap.items() %}
+                <div class="heatmap-label">{{ unit }}</div>
+                
+                {% if score >= 0.8 %}
+                    <div class="heatmap-cell heatmap-excellent">
+                        <div class="heatmap-value">✓</div>
+                        <div class="heatmap-percent">{{ (score * 100)|int }}%</div>
+                    </div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                {% elif score >= 0.6 %}
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-good">
+                        <div class="heatmap-value">◐</div>
+                        <div class="heatmap-percent">{{ (score * 100)|int }}%</div>
+                    </div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                {% elif score >= 0.4 %}
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-fair">
+                        <div class="heatmap-value">◑</div>
+                        <div class="heatmap-percent">{{ (score * 100)|int }}%</div>
+                    </div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                {% else %}
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-empty"></div>
+                    <div class="heatmap-cell heatmap-poor">
+                        <div class="heatmap-value">✗</div>
+                        <div class="heatmap-percent">{{ (score * 100)|int }}%</div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            
+            <div class="heatmap-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
+                    <span>Excellent: 80-100%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);"></div>
+                    <span>Good: 60-79%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></div>
+                    <span>Fair: 40-59%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);"></div>
+                    <span>Needs Work: &lt;40%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Summary Cards -->
+        <div class="performance-cards">
+            <div class="perf-card">
+                <div class="perf-label">📊 Overall Mastery</div>
+                <div class="perf-value">{{ (mastery * 100)|int }}%</div>
+            </div>
+            <div class="perf-card">
+                <div class="perf-label">🎯 Learning Gap</div>
+                <div class="perf-value">{{ gap }}</div>
+            </div>
+            <div class="perf-card">
+                <div class="perf-label">⭐ Your Status</div>
+                <div class="perf-value" style="font-size: 1.8rem;">
+                    {% if status == 'Excellent' %}🌟
+                    {% elif status == 'Good' %}⚡
+                    {% elif status == 'Fair' %}📈
+                    {% else %}💪
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if severity_analysis %}
+        <div class="section">
+            <h2>Attempt Analysis (Severity Factor)</h2>
+            
+            <div class="severity-info">
+                <strong>Overall Severity Score: {{ severity_analysis.overall_severity }}/3</strong>
+                <div class="severity-scale">
+                    <div class="severity-level"><strong>1 attempt</strong> = First try</div>
+                    <div class="severity-level"><strong>2 attempts</strong> = Mild difficulty</div>
+                    <div class="severity-level"><strong>3 attempts</strong> = Moderate difficulty</div>
+                    <div class="severity-level"><strong>4+ attempts</strong> = High difficulty</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px; margin-bottom: 15px; color: #666;">Questions Requiring Multiple Attempts:</h3>
+            
+            {% if severity_analysis.by_question %}
+                {% for q_id, q_data in severity_analysis.by_question.items() %}
+                    {% if q_data.attempts > 1 %}
+                    <div class="question-details">
+                        <div class="question-text">
+                            <span class="severity-icon severity-{{ q_data.severity }}">{{ q_data.attempts }}</span>
+                            {{ q_data.question }}
+                        </div>
+                        <div class="question-meta">
+                            <span><strong>Attempts:</strong> {{ q_data.attempts }}</span>
+                            <span><strong>Difficulty:</strong> 
+                                {% if q_data.severity == 0 %}Low
+                                {% elif q_data.severity == 1 %}Mild  
+                                {% elif q_data.severity == 2 %}Moderate
+                                {% else %}High{% endif %}
+                            </span>
+                            <span><strong>Status:</strong> {% if q_data.correct %}Correct{% else %}Incorrect{% endif %}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="section">
+            <h2>Unit-wise Performance</h2>
+            
+            {% for unit, score in heatmap.items() %}
+            <div class="performance-unit">
+                <div class="unit-name">{{ unit }}</div>
+                <div class="unit-score {% if score > 0.8 %}score-excellent{% elif score > 0.6 %}score-good{% elif score > 0.4 %}score-fair{% else %}score-poor{% endif %}">
+                    {{ (score * 100)|int }}%
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2>🎯 Personalized Study Plan</h2>
+            
+            {% for p in plan %}
+            <div class="study-plan-item">{{ p }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="button-group">
+            <a href="{{ url_for('chapters.view_chapters', subject='astronomy') }}" class="btn btn-primary">Take Another Quiz</a>
+            <a href="{{ url_for('chapters.view_chapters', subject='astronomy') }}" class="btn btn-secondary">Back to Chapters</a>
+            <a href="/logout" class="btn btn-secondary">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
