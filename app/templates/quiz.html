@@ -48,7 +48,7 @@
 
                 <div class="hint-section" id="hint-{{ question.id }}">
                     <div class="hint-label">Hint</div>
-                    <div class="hint-text">{{ question.hint }}</div>
+                    <div class="hint-text">{{ question.hint if question.hint else 'No hint available for this question.' }}</div>
                     <div class="attempt-count">Attempts: <span id="attempts-{{ question.id }}">0</span></div>
                 </div>
 
@@ -123,7 +123,15 @@
             const optionLabel = radioInput.closest('.option');
             const questionDiv = document.getElementById('question-' + currentQuestion);
             const hintSection = document.getElementById('hint-' + questionId);
+            const hintText = hintSection.querySelector('.hint-text');
             const allOptions = questionDiv.querySelectorAll('.option');
+
+            // Ensure hint text exists
+            if (!hint || hint.trim() === '') {
+                hintText.textContent = 'No hint available for this question.';
+            } else {
+                hintText.textContent = hint;
+            }
 
             // Reset all options to neutral state
             allOptions.forEach(opt => {
@@ -140,13 +148,14 @@
             if (selectedValue === correctValue) {
                 // Correct answer
                 optionLabel.classList.add('correct');
-                hintSection.classList.remove('show');
             } else {
                 // Incorrect answer
                 optionLabel.classList.add('incorrect');
-                hintSection.classList.add('show');
                 radioInput.checked = false;
             }
+
+            // Show hint on every selection
+            hintSection.classList.add('show');
 
             // Update attempts data in hidden field
             document.getElementById('attemptsData').value = JSON.stringify(attemptsMap);

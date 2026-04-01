@@ -8,15 +8,37 @@ def view_subjects():
     if 'user_id' not in session:
         return redirect('/login')
 
-    # Show the Astronomy unit overview
+    # Load all available subjects
+    subjects = []
+    subject_info = {
+        'astronomy': {'icon': '🌌', 'description': 'Explore the cosmos, planets, and stars'},
+        'physics': {'icon': '⚡', 'description': 'Study forces, energy, and motion'},
+        'biology': {'icon': '🧬', 'description': 'Learn life science, cells, and ecosystems'}
+    }
+    
     try:
-        chapters = load_chapters('astronomy')
-        chapter_count = len(chapters)
-        return render_template('unit_overview.html', 
-                             unit_name='Astronomy', 
-                             chapter_count=chapter_count)
+        available = get_available_subjects()
+        for subject in available:
+            chapters = load_chapters(subject)
+            subject_name = get_unit_name(subject)
+            info = subject_info.get(subject, {'icon': '📖', 'description': ''})
+            subjects.append({
+                'id': subject,
+                'name': subject_name,
+                'icon': info['icon'],
+                'description': info['description'],
+                'chapter_count': len(chapters)
+            })
     except Exception as e:
         return redirect('/login')
+    
+    # If only one subject, show that one; otherwise show selection
+    if len(subjects) == 1:
+        return render_template('unit_overview.html', 
+                             unit_name=subjects[0]['name'], 
+                             chapter_count=subjects[0]['chapter_count'])
+    else:
+        return render_template('subjects.html', subjects=subjects)
 
 @chapters_bp.route('/chapters/<subject>')
 def view_chapters(subject):

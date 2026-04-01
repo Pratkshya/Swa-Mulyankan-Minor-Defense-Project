@@ -250,6 +250,30 @@ input:focus, textarea:focus, select:focus {
     box-shadow: var(--shadow-hover);
 }
 
+/* Quiz hint behavior */
+.hint-section {
+    display: none;
+    margin-top: 1rem;
+    border: 1px dashed var(--border);
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    background: #f1f5f9;
+}
+
+.hint-section.show {
+    display: block;
+}
+
+.hint-label {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.hint-text {
+    margin-top: 0.4rem;
+    color: var(--text);
+}
+
 .auth-container {
     max-width: 450px;
     margin: 3rem auto;

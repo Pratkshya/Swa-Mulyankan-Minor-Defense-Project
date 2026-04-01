@@ -14,7 +14,8 @@ def _load_spec_data(subject=None):
     # Map subject names to file names
     subject_files = {
         'astronomy': 'cdc_specification.json',
-        'physics': 'physics_specification.json'
+        'physics': 'physics_specification.json',
+        'biology': 'bio_specification.json'
     }
 
     # Default to astronomy if no subject specified
@@ -23,7 +24,7 @@ def _load_spec_data(subject=None):
 
     subject = subject.lower()
     if subject not in subject_files:
-        raise ValueError(f"Unknown subject: {subject}. Supported subjects: astronomy, physics")
+        raise ValueError(f"Unknown subject: {subject}. Supported subjects: astronomy, physics, biology")
 
     json_path = os.path.join(base_dir, 'data', subject_files[subject])
 
@@ -116,6 +117,11 @@ def get_available_subjects():
     physics_path = os.path.join(base_dir, 'data', 'physics_specification.json')
     if os.path.exists(physics_path):
         subjects.append('physics')
+
+    # Check for biology file
+    biology_path = os.path.join(base_dir, 'data', 'bio_specification.json')
+    if os.path.exists(biology_path):
+        subjects.append('biology')
 
     return subjects
 
