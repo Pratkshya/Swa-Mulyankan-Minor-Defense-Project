@@ -13,7 +13,8 @@ def view_subjects():
     subject_info = {
         'astronomy': {'icon': '🌌', 'description': 'Explore the cosmos, planets, and stars'},
         'physics': {'icon': '⚡', 'description': 'Study forces, energy, and motion'},
-        'biology': {'icon': '🧬', 'description': 'Learn life science, cells, and ecosystems'}
+        'biology': {'icon': '🧬', 'description': 'Learn life science, cells, and ecosystems'},
+        'chemistry': {'icon': '🧪', 'description': 'Understand atoms, reactions, and chemical principles'}
     }
     
     try:
