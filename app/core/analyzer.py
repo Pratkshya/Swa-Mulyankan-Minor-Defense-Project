@@ -12,7 +12,7 @@ def calculate_severity_factor(question_id, attempts, is_correct):
     - 4+ attempts: severity = 3 (high difficulty)
     """
     if not is_correct:
-        return 3  # FIXED: keep max within 0–3 scale
+        return 4  # Maximum severity for unanswered questions
     
     if attempts <= 1:
         return 0
@@ -53,20 +53,14 @@ def analyze(answers, questions, attempts_data=None):
         correct_score = 1 if is_correct else 0
         unit_scores[unit].append(correct_score)
         
-        # SAFE attempts handling (prevents crash)
-        attempts_raw = attempts_data.get(question_id, 1)
-        try:
-            attempts = int(attempts_raw) if attempts_raw else 1
-        except:
-            attempts = 1
-        
+        # Calculate severity for this question
+        attempts = int(attempts_data.get(question_id, 1)) if attempts_data else 1
         severity = calculate_severity_factor(q['id'], attempts, is_correct)
-        
         severity_by_question[question_id] = {
             'severity': severity,
             'attempts': attempts,
             'correct': is_correct,
-            'question': q.get('question', '')
+            'question': q['question']
         }
         severity_by_unit[unit].append(severity)
     
@@ -84,19 +78,11 @@ def analyze(answers, questions, attempts_data=None):
     
     # Generate study plan
     plan = []
-    
-    if severity_by_question:
-        overall_severity = round(
-            sum(s['severity'] for s in severity_by_question.values()) / 
-            len(severity_by_question), 2
-        )
-    else:
-        overall_severity = 0
-    
     severity_analysis = {
         'by_question': severity_by_question,
         'by_unit': severity_by_unit_avg,
-        'overall_severity': overall_severity
+        'overall_severity': round(sum(s['severity'] for s in severity_by_question.values()) / 
+                                   len(severity_by_question) if severity_by_question else 0, 2)
     }
     
     for unit, score in heatmap.items():
@@ -104,13 +90,11 @@ def analyze(answers, questions, attempts_data=None):
         
         if score < 0.5:
             plan.append(f"🔴 {unit} - Score: {score*100:.0f}% (Severity: {severity:.1f}/3) - Requires intensive study")
-        
         elif score < 0.75:
             if severity >= 1.5:
                 plan.append(f"🟡 {unit} - Score: {score*100:.0f}% (Severity: {severity:.1f}/3) - Review needed, multiple attempts required")
             else:
                 plan.append(f"🟡 {unit} - Score: {score*100:.0f}% (Severity: {severity:.1f}/3) - Additional practice recommended")
-        
         else:
             if severity <= 0.5:
                 plan.append(f"🟢 {unit} - Score: {score*100:.0f}% (Severity: {severity:.1f}/3) - Excellent! Keep practicing to maintain")
