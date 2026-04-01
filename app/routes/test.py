@@ -38,6 +38,7 @@ def submit():
     # Save result to database
     save_result(session['user_id'], result['mastery'], result['gap'], result['status'])
 
+    # Preserve current subject for navigation buttons
     return render_template(
         'result.html',
         mastery=result['mastery'],
@@ -45,5 +46,6 @@ def submit():
         status=result['status'],
         heatmap=result['heatmap'],
         plan=result['plan'],
-        severity_analysis=result.get('severity_analysis', {})
+        severity_analysis=result.get('severity_analysis', {}),
+        subject=subject
     )

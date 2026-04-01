@@ -173,8 +173,8 @@
         </div>
 
         <div class="button-group">
-            <a href="{{ url_for('chapters.view_chapters', subject='astronomy') }}" class="btn btn-primary">Take Another Quiz</a>
-            <a href="{{ url_for('chapters.view_chapters', subject='astronomy') }}" class="btn btn-secondary">Back to Chapters</a>
+            <a href="{{ url_for('chapters.view_chapters', subject=subject) }}" class="btn btn-primary">Take Another Quiz</a>
+            <a href="{{ url_for('chapters.view_chapters', subject=subject) }}" class="btn btn-secondary">Back to Chapters</a>
             <a href="/logout" class="btn btn-secondary">Logout</a>
         </div>
     </div>
