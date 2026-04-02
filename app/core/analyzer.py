@@ -50,7 +50,20 @@ def analyze(answers, questions, attempts_data=None):
         question_id = str(q['id'])
         
         is_correct = answers.get(question_id) == q['correct_answer']
-        correct_score = 1 if is_correct else 0
+        #Corrected Code
+        if is_correct:
+            attempts = int(attempts_data.get(question_id, 1))
+            
+            if attempts == 1:
+                correct_score = 1.0
+            elif attempts == 2:
+                correct_score = 0.8
+            elif attempts == 3:
+                correct_score = 0.6
+            else:
+                correct_score = 0.4
+        else:
+            correct_score = 0
         unit_scores[unit].append(correct_score)
         
         # Calculate severity for this question

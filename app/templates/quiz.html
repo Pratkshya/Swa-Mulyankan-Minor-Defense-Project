@@ -28,23 +28,30 @@
                 <div class="question-text">{{ question.question }}</div>
                 
                 <div class="options-container">
-                    <label class="option">
-                        <input type="radio" name="{{ question.id }}" value="a" onclick="checkAnswer(this, '{{ question.id }}', 'a', '{{ question.correct_answer }}', '{{ question.hint }}')">
-                        <span class="option-text">{{ question.option_a }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="{{ question.id }}" value="b" onclick="checkAnswer(this, '{{ question.id }}', 'b', '{{ question.correct_answer }}', '{{ question.hint }}')">
-                        <span class="option-text">{{ question.option_b }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="{{ question.id }}" value="c" onclick="checkAnswer(this, '{{ question.id }}', 'c', '{{ question.correct_answer }}', '{{ question.hint }}')">
-                        <span class="option-text">{{ question.option_c }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="{{ question.id }}" value="d" onclick="checkAnswer(this, '{{ question.id }}', 'd', '{{ question.correct_answer }}', '{{ question.hint }}')">
-                        <span class="option-text">{{ question.option_d }}</span>
-                    </label>
-                </div>
+                <label class="option">
+                    <input type="radio" name="{{ question.id }}" value="a"
+                    onclick='checkAnswer(this, {{ question.id|tojson }}, "a", {{ question.correct_answer|tojson }}, {{ question.hint|tojson }})'>
+                    <span class="option-text">{{ question.option_a }}</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="{{ question.id }}" value="b"
+                    onclick='checkAnswer(this, {{ question.id|tojson }}, "b", {{ question.correct_answer|tojson }}, {{ question.hint|tojson }})'>
+                    <span class="option-text">{{ question.option_b }}</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="{{ question.id }}" value="c"
+                    onclick='checkAnswer(this, {{ question.id|tojson }}, "c", {{ question.correct_answer|tojson }}, {{ question.hint|tojson }})'>
+                    <span class="option-text">{{ question.option_c }}</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="{{ question.id }}" value="d"
+                    onclick='checkAnswer(this, {{ question.id|tojson }}, "d", {{ question.correct_answer|tojson }}, {{ question.hint|tojson }})'>
+                    <span class="option-text">{{ question.option_d }}</span>
+                </label>
+            </div>
 
                 <div class="hint-section" id="hint-{{ question.id }}">
                     <div class="hint-label">Hint</div>
@@ -141,21 +148,31 @@
             // Increment attempt count
             const attemptCountEl = document.getElementById('attempts-' + questionId);
             let currentCount = parseInt(attemptCountEl.textContent);
-            currentCount++;
+            if (selectedValue !== correctValue) {
+                currentCount++;
+            }
             attemptCountEl.textContent = currentCount;
             attemptsMap[questionId] = currentCount;
 
             if (selectedValue === correctValue) {
-                // Correct answer
+                // Correct answer → NO hint
                 optionLabel.classList.add('correct');
+                hintSection.classList.remove('show');
+
             } else {
-                // Incorrect answer
+                // Wrong answer → SHOW hint
                 optionLabel.classList.add('incorrect');
                 radioInput.checked = false;
-            }
 
-            // Show hint on every selection
-            hintSection.classList.add('show');
+                // Set hint text only when needed
+                if (!hint || hint.trim() === '') {
+                    hintText.textContent = 'No hint available for this question.';
+                } else {
+                    hintText.textContent = hint;
+                }
+
+                hintSection.classList.add('show');
+            }
 
             // Update attempts data in hidden field
             document.getElementById('attemptsData').value = JSON.stringify(attemptsMap);
